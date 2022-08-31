@@ -10,7 +10,7 @@ O [OpenGL](https://www.opengl.org) é uma API livre utilizada na computação gr
 
 * Essa ferramenta vai ser útil para instalar os pacotes necessários para rodar os projetos com OpenGL.
 
-* Link para download: [MSYS2](https://www.msys2.org).
+* [Clique aqui](https://www.msys2.org) para efetuar o download da ferramenta.
 
 * Ao final da instalação será aberta uma janela com um terminal, que é onde vamos digitar os comandos para instalação dos pacotes.
 
@@ -21,15 +21,15 @@ O [OpenGL](https://www.opengl.org) é uma API livre utilizada na computação gr
   pacman -S mingw-w64-x86_64-gcc
 ```
 
-Após finalizado, é necessário adicionar ao `Path` das variáveis de ambiente do sistema, o caminho da pasta *bin* do diretório de instalação do MinGW. Ele vai estar dentro da pasta de instalação do MSYS2, **caso não tenha alterado** o diretório de instalação será o seguinte:
+Após finalizado, é necessário adicionar ao `Path` das variáveis de ambiente do sistema, o caminho da pasta *bin* do diretório de instalação do MinGW. Ele vai estar dentro da pasta de instalação do MSYS2. **Caso não tenha alterado**, o diretório de instalação será o seguinte:
 
 ```bash
   C:\msys64\mingw64\bin
 ```
 
-Para confirmar se a instalação foi bem sucedida, abra o CMD e execute os comandos `gcc --version` ou `g++ --version`, caso não funcione, reinicie o computador e tente executá-los novamente.
+Para confirmar se a instalação foi bem sucedida, abra o CMD e execute o comando `g++ --version`. Caso não retorne um resultado válido, reinicie o computador e tente executá-lo novamente.
 
-* Copie o comando abaixo e cole no terminal do MSYS2 para instalar o `depurador`, ele vai facilitar nossa vida no VS Code:
+* Copie o comando abaixo e cole no terminal do MSYS2 para instalar o `depurador`, ele vai facilitar nossa vida no VS Code (essa instalação é *opcional*, o **gdb** só será útil no **passo 6**):
 ```bash
   pacman -S mingw-w64-x86_64-gdb
 ```
@@ -38,7 +38,7 @@ Assim como o gcc, para confirmar se a instalação correu bem, você pode execut
 
 #### 3° passo - Download dos pacotes do OpenGL:
 
-* Segue o mesmo procedimento de instalação do compilador e depurador, mas esses aqui vão ser mais rápidos, já que são menores.
+* Também no terminal do MSYS2, executaremos os comandos abaixo para instalação dos pacotes, esses vão demorar menos que o gcc, já que são menores.
 ```bash
   pacman -S mingw-w64-x86_64-freeglut
 ```
@@ -51,7 +51,7 @@ Assim como o gcc, para confirmar se a instalação correu bem, você pode execut
 
 #### 4° passo - Instalação e configuração do ambiente
 
-* Instalação da IDE: [VS Code](https://code.visualstudio.com).
+* [Clique aqui](https://code.visualstudio.com) para efetuar o download da IDE.
 
 * Finalizada a instalação, vá até a aba de extensões, procure e instale a seguinte: `ms-vscode.cpptools`.
 
@@ -63,13 +63,13 @@ Assim como o gcc, para confirmar se a instalação correu bem, você pode execut
 ```bash
   g++ casa.cpp -o casa -lopengl32 -lfreeglut -lglu32 -lwinmm -lgdi32
 ```
-Se tudo correr bem, será gerado um arquivo **.exe**, para abri-lo basta chamar o próprio executável pelo terminal, digitando: `./casa.exe` :house:.
+Se tudo correr bem, será gerado um arquivo **.exe**, para abrí-lo basta chamar o próprio executável pelo terminal, digitando: `./casa.exe` :house:.
 
 Com isso, já dá pra executar os projetos, mas pra evitar ter que ficar inserindo esses comandos via terminal toda vez, vamos dar uma "embelezada" no negócio...
 
 #### 6° passo - *Opcional*:
 
-:warning: **Para os passos a seguir, mantenha o arquivo `casa.cpp` sempre aberto ao selecionar as opções do menu da IDE.** :warning:
+:warning: **Para os passos a seguir, mantenha o arquivo `casa.cpp` sempre aberto ao selecionar as opções do menu da IDE.**
 
 * Preparação do build do código:
   - Acesse o menu **Terminal > Configurar Tarefa de Build Padrão**.
@@ -88,8 +88,10 @@ Através do atalho **Ctrl + Shift + B** ou por meio do menu **Terminal > Executa
   - Selecione a opção **C++ (GDB/LLDB)**.
   - Será gerado um arquivo `launch.json` na pasta **.vscode**.
   - Caso o arquivo gerado esteja com o parâmetro *configurations* vazio, você pode copiar o que está nesse repositório.
+  
+*Uma outra forma de gerar esse arquivo é clicando no ícone da engrenagem (**Adicionar a configuração de depuração**), que está no canto superior direito, e selecionar a opção com o **g++***.
 
-Nos atentaremos aos seguintes parâmetros: `program`, `miDebuggerPath` e `preLaunchTask`.
+Com o arquivo criado, nos atentaremos aos seguintes parâmetros: `program`, `miDebuggerPath` e `preLaunchTask`.
 
 `program`: vamos informar onde está o arquivo **.exe**, caso você tenha alterado o nome, é importante informar corretamente aqui.
 
@@ -107,6 +109,8 @@ Feito isso, agora é só alegria! :smile:
 Mantenha o arquivo `casa.cpp` aberto e pressione **`F5`**. Pronto, sucesso! :rocket:
 
 ### :mag_right: Referências
+
+* [Get Started with C++ and Mingw-w64 in Visual Studio Code](https://code.visualstudio.com/docs/cpp/config-mingw).
 
 * [Configurando minGW e SDL2 no Visual Studio Code](https://medium.com/estado-pensante/configurando-mingw-e-sdl2-no-visual-studio-code-5c1ae2f5a1c6).
 

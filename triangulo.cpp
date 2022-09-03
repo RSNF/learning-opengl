@@ -1,6 +1,4 @@
 #include <stdlib.h>
-#include <iostream>
-#include <locale.h>
 #include <GL/glut.h>
 
 // Função callback de redesenho da janela de visualização
@@ -13,10 +11,10 @@ void Desenha(void)
 
 	// Alteracao 2 - gradiente de cor
 	// Desenha um triângulo no centro da janela
-	glColor3f(0, 1, 0);
+	glColor3f(1, 0, 0);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(-1.0, -0.5, 0);
-	glColor3f(1, 0, 0);
+	glColor3f(0, 1, 0);
 	glVertex3f(-0.5, 0.5, 0);
 	glVertex3f(0.0, -0.5, 0);
 	glEnd();

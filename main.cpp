@@ -44,6 +44,85 @@ void DesenhaQuadradoCruz(){
 //	glPopMatrix();
 }
 
+// Funcao para desenhar uma linha
+void Linha(float px, float py, float px2, float py2)
+{
+    glPushMatrix();
+    glLineWidth(10.0);
+    glBegin(GL_LINES);
+    glColor3f(1, 0, 0);
+    glVertex2f(px, py);
+    glVertex2f(px2, py2);
+    glEnd();
+    glPopMatrix();
+}
+
+// Desenho 2 - Um quadrado e uma cruz
+void DesenhaQuadradoCruz()
+{
+    // Quadrado central maior
+    // glPushMatrix();
+    // glLineWidth(10.0);
+    // glBegin(GL_LINE_LOOP);
+    // glColor3f(1, 0, 0);
+    // glVertex2f(0.5, 0.5);
+    // glVertex2f(-0.5, 0.5);
+    // glVertex2f(-0.5, -0.5);
+    // glVertex2f(0.5, -0.5);
+    // glEnd();
+    // glPopMatrix();
+
+    // Simulação do quadrado central maior com linhas
+    // Linha horizontal superior
+    Linha(0.5, 0.5, -0.5, 0.5);
+    // Linha vertical esquerda
+    Linha(-0.476, 0.5, -0.476, -0.5);
+    // Linha horizontal inferior
+    Linha(-0.5, -0.5, 0.5, -0.5);
+    // Linha vertical direita
+    Linha(0.476, -0.5, 0.476, 0.5);
+
+    // Linha horizontal
+    Linha(0, 1, 0, -1);
+    // Linha vertical
+    Linha(1, 0, -1, 0);
+
+    // Quadrado central menor
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glColor3f(0, 1, 0);
+    glVertex2f(-0.06, 0.06);
+    glVertex2f(-0.06, -0.06);
+    glVertex2f(0.06, -0.06);
+    glVertex2f(0.06, 0.06);
+    glEnd();
+    glPopMatrix();
+}
+
+void Vertente(char cor, float px, float py, float px2, float py2)
+{
+    if (cor == 'r'){
+        glColor3f(1, 0, 0);
+    }else if (cor == 'g'){
+        glColor3f(0, 1, 0);
+    }else if (cor == 'b'){
+        glColor3f(0, 0, 1);
+    }
+    
+    glVertex2f(px, py);
+    glVertex2f(px2, py2);
+}
+
+void Trivertentes()
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_LOOP);
+    Vertente('g', 0.2, 0, 0, 0.5);
+    Vertente('r', -0.2, 0, -0.6, -0.5);
+    Vertente('b', 0, -0.3, 0.6, -0.5);
+    glEnd();
+}
+
 // Funcao callback de redesenho da janela de visualizacao
 void Desenha(void)
 {
@@ -54,8 +133,11 @@ void Desenha(void)
 	// Desenho 1 - Quatro losangos
 	DesenhaLosangos();
 
-	// Desenho 2 - Um quadrado e uma cruz
-	// DesenhaQuadradoCruz();
+    // Desenho 2 - Um quadrado e uma cruz
+    // DesenhaQuadradoCruz();
+
+    // Desenho 3 - Tri-vertentes coloridos
+    Trivertentes();
 
 	glFlush(); // Executa os comandos OpenGL
 }

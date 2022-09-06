@@ -18,20 +18,22 @@ O [OpenGL](https://www.opengl.org) é uma API livre utilizada na computação gr
 
 * Copie o comando abaixo e cole no terminal do MSYS2 para instalar o `compilador` de C/C++:
 ```bash
-  pacman -S mingw-w64-x86_64-gcc
+pacman -S mingw-w64-x86_64-gcc
 ```
 
 Após finalizado, é necessário adicionar ao `Path` das variáveis de ambiente do sistema, o caminho da pasta *bin* do diretório de instalação do MinGW. Ele vai estar dentro da pasta de instalação do MSYS2. **Caso não tenha alterado**, o diretório de instalação será o seguinte:
 
 ```bash
-  C:\msys64\mingw64\bin
+C:\msys64\mingw64\bin
 ```
+
+**Clicando neste [link](https://satellasoft.com/artigo/windows/windows-10-como-alterar-as-variaveis-de-ambiente) você pode ver como fazer essa alteração nas variáveis de ambiente.**
 
 Para confirmar se a instalação foi bem sucedida, abra o CMD e execute o comando `g++ --version`. Caso não retorne um resultado válido, reinicie o computador e tente executá-lo novamente.
 
 * Copie o comando abaixo e cole no terminal do MSYS2 para instalar o `depurador`, ele vai facilitar nossa vida no VS Code (essa instalação é *opcional*, o **gdb** só será útil no **passo 6**):
 ```bash
-  pacman -S mingw-w64-x86_64-gdb
+pacman -S mingw-w64-x86_64-gdb
 ```
 
 Assim como o gcc, para confirmar se a instalação correu bem, você pode executar o comando `gdb --version` no CMD.
@@ -40,11 +42,11 @@ Assim como o gcc, para confirmar se a instalação correu bem, você pode execut
 
 * Também no terminal do MSYS2, executaremos os comandos abaixo para instalação dos pacotes, esses vão demorar menos que o gcc, já que são menores.
 ```bash
-  pacman -S mingw-w64-x86_64-freeglut
+pacman -S mingw-w64-x86_64-freeglut
 ```
 
 ```bash
-  pacman -S mingw-w64-x86_64-glew
+pacman -S mingw-w64-x86_64-glew
 ```
 
 *Caso o projeto que você for executar exija outros pacotes, como o GLFW e SDL2, você pode pesquisar no próprio site do [MSYS2](https://packages.msys2.org/package/) que vai encontrar as informações sobre eles e como instalá-los.*
@@ -61,7 +63,7 @@ Assim como o gcc, para confirmar se a instalação correu bem, você pode execut
 
 * Abra um novo terminal, dentro do VS Code, e execute o seguinte comando:
 ```bash
-  g++ casa.cpp -o casa -lopengl32 -lfreeglut -lglu32 -lwinmm -lgdi32
+g++ casa.cpp -o casa -lopengl32 -lfreeglut -lglu32 -lwinmm -lgdi32
 ```
 Se tudo correr bem, será gerado um arquivo **.exe**, para abrí-lo basta chamar o próprio executável pelo terminal, digitando: `./casa.exe` :house:.
 
@@ -78,7 +80,7 @@ Com isso, já dá pra executar os projetos, mas pra evitar ter que ficar inserin
   - Dentro do parâmetro ***args***, vamos acrescentar o seguinte:
 
 ```bash
-  "-lopengl32", "-lfreeglut", "-lglu32", "-lwinmm", "-lgdi32"
+"-lopengl32", "-lfreeglut", "-lglu32", "-lwinmm", "-lgdi32"
 ```
 
 Através do atalho **Ctrl + Shift + B** ou por meio do menu **Terminal > Executar Tarefa de Build**, podemos gerar o arquivo **.exe** que vimos anteriormente (*lembrando que o arquivo **casa.cpp** deve estar aberto*). Isso já poupa um dos comandos que a gente estava usando no terminal, vamos para o próximo.

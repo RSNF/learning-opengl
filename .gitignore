@@ -1,1 +1,6 @@
 *.exe
+.vscode/
+include/
+lib/
+freeglut.dll
+

@@ -8,31 +8,41 @@ void DesenhaQuadrado(float tx, float ty){
 	glTranslatef(tx,ty,0);
 	glRotatef(45, 0, 0, 1);
 	glBegin(GL_QUADS);
-	glVertex3f(-0.2, -0.2, 0);
-	glVertex3f(-0.2, 0.2, 0);
-	glVertex3f(0.2, 0.2, 0);
-	glVertex3f(0.2, -0.2, 0);
+	glVertex3f(-2, -2, 0);
+	glVertex3f(-2, 2, 0);
+	glVertex3f(2, 2, 0);
+	glVertex3f(2, -2, 0);
 	glEnd();
 	glPopMatrix();
 }
 
 // Desenho 1 - Quatro losangos
 void DesenhaLosangos(){
-	glColor3f(0, 0, 1);
-	DesenhaQuadrado(-0.4, 0);
-	
-	glColor3f(1, 0, 1);
-	DesenhaQuadrado(0.4, 0);
-	
-	glColor3f(0, 1, 0);
-	DesenhaQuadrado(0, 0.4);
+
+	// Limpa a janela de visualizacaoo com a cor verde
+	glClearColor(0, 1, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glColor3f(1, 1, 0);
+	DesenhaQuadrado(-4, 0);
 	
 	glColor3f(1, 0, 0);
-	DesenhaQuadrado(0, -0.4);
+	DesenhaQuadrado(4, 0);
+	
+	glColor3f(0, 0,	 1);
+	DesenhaQuadrado(0, 4);
+	
+	glColor3f(0, 0, 0);
+	DesenhaQuadrado(0, -4);
 }
 
 // Desenho 2 - Um quadrado e uma cruz
 void DesenhaQuadradoCruz(){
+
+	// Limpa a janela de visualizacaoo com a cor amarela
+	glClearColor(1, 1, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 //	glPushMatrix();
 //	glTranslatef(0,0,0);
 	glBegin(GL_LINE_LOOP);
@@ -47,15 +57,11 @@ void DesenhaQuadradoCruz(){
 // Funcao callback de redesenho da janela de visualizacao
 void Desenha(void)
 {
-	// Limpa a janela de visualizacaoo com a cor amarela
-	glClearColor(1, 1, 0, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
-
 	// Desenho 1 - Quatro losangos
-	DesenhaLosangos();
+	// DesenhaLosangos();
 
 	// Desenho 2 - Um quadrado e uma cruz
-	// DesenhaQuadradoCruz();
+	DesenhaQuadradoCruz();
 
 	glFlush(); // Executa os comandos OpenGL
 }
@@ -72,7 +78,7 @@ void Inicializa(void)
 {
 	// Define a janela de visualizacao 2D
 	glMatrixMode(GL_PROJECTION);
-	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+	gluOrtho2D(-10.0, 10.0, -10.0, 10.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 

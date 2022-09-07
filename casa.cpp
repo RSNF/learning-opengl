@@ -5,8 +5,8 @@
 // e desenha uma casa.
 //
 // Marcelo Cohen e Isabel H. Manssour
-// Este c�digo acompanha o livro 
-// "OpenGL - Uma Abordagem Pr�tica e Objetiva"
+// Este codigo acompanha o livro 
+// "OpenGL - Uma Abordagem Pratica e Objetiva"
 // 
 //*****************************************************
 
@@ -14,14 +14,14 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 
-// Fun��o callback de redesenho da janela de visualiza��o
+// Funcao callback de redesenho da janela de visualizacao
 void Desenha(void)
 {
-	// Limpa a janela de visualiza��o com a cor  
+	// Limpa a janela de visualizacao com a cor  
 	// de fundo definida previamente
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Desenha uma casinha composta de um quadrado e um tri�ngulo
+	// Desenha uma casinha composta de um quadrado e um triangulo
 
 	// Altera a cor do desenho para azul
 	glColor3f(0.0f, 0.0f, 1.0f);     
@@ -70,7 +70,7 @@ void Desenha(void)
 	glFlush();
 }
 
-// Fun��o callback chamada quando o tamanho da janela � alterado 
+// Funcao callback chamada quando o tamanho da janela eh alterado 
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 {
 	GLsizei largura, altura;
@@ -78,36 +78,36 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 	// Evita a divisao por zero
 	if(h == 0) h = 1;
 
-	// Atualiza as vari�veis
+	// Atualiza as variaveis
 	largura = w;
 	altura = h;
 
-	// Especifica as dimens�es da Viewport
+	// Especifica as dimensoes da Viewport
 	glViewport(0, 0, largura, altura);
 
 	// Inicializa o sistema de coordenadas
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	// Estabelece a janela de sele��o (esquerda, direita, inferior, 
-	// superior) mantendo a propor��o com a janela de visualiza��o
+	// Estabelece a janela de selecao (esquerda, direita, inferior, 
+	// superior) mantendo a proporcao com a janela de visualizacao
 	if (largura <= altura) 
 		gluOrtho2D (-40.0f, 40.0f, -40.0f*altura/largura, 40.0f*altura/largura);
 	else 
 		gluOrtho2D (-40.0f*largura/altura, 40.0f*largura/altura, -40.0f, 40.0f);
 }
 
-// Fun��o callback chamada para gerenciar eventos de teclas
+// Funcao callback chamada para gerenciar eventos de teclas
 void Teclado (unsigned char key, int x, int y)
 {
 	if (key == 27)
 		exit(0);
 }
 
-// Fun��o respons�vel por inicializar par�metros e vari�veis
+// Funcao responsavel por inicializar parametros e variaveis
 void Inicializa (void)
 {   
-	// Define a cor de fundo da janela de visualiza��o como branca
+	// Define a cor de fundo da janela de visualizacao como branca
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -117,31 +117,31 @@ int main(int argc, char *argv[])
 
 	glutInit( & argc, argv ); // Adicionado.
 
-	// Define do modo de opera��o da GLUT
+	// Define do modo de operacao da GLUT
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
-	// Especifica a posi��o inicial da janela GLUT
+	// Especifica a posicao inicial da janela GLUT
 	glutInitWindowPosition(5,5); 
 
 	// Especifica o tamanho inicial em pixels da janela GLUT
 	glutInitWindowSize(450,450); 
  
-	// Cria a janela passando como argumento o t�tulo da mesma
+	// Cria a janela passando como argumento o titulo da mesma
 	glutCreateWindow("Desenho de uma casa");
 
-	// Registra a fun��o callback de redesenho da janela de visualiza��o
+	// Registra a funcao callback de redesenho da janela de visualizacao
 	glutDisplayFunc(Desenha);
 
-	// Registra a fun��o callback de redimensionamento da janela de visualiza��o
+	// Registra a funcao callback de redimensionamento da janela de visualizacao
 	glutReshapeFunc(AlteraTamanhoJanela);
 
-	// Registra a fun��o callback para tratamento das teclas ASCII
+	// Registra a funcao callback para tratamento das teclas ASCII
 	glutKeyboardFunc (Teclado);
     
-	// Chama a fun��o respons�vel por fazer as inicializa��es 
+	// Chama a funcao responsavel por fazer as inicializacoes 
 	Inicializa();
 
-	// Inicia o processamento e aguarda intera��es do usu�rio
+	// Inicia o processamento e aguarda interacoes do usuario
 	glutMainLoop();
 
 	return 0;

@@ -60,7 +60,7 @@ pacman -S mingw-w64-x86_64-glew
 
 * Finalizada a instalação, vá até a aba de extensões, procure e instale a seguinte: `ms-vscode.cpptools`.
 
-* Faça o download do arquivo `casa.cpp` disponível neste repositório, salve-o numa pasta separada e abra essa pasta no VS Code.
+* Faça o download do arquivo `casa.cpp` disponível neste repositório, na pasta de **exemplos**, salve-o numa pasta separada e abra essa pasta no VS Code.
 
 #### 5° passo - Execução do projeto:
 

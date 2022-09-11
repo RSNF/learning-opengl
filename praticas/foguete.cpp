@@ -52,8 +52,9 @@ void DesenhaFoguete(void)
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glPushMatrix();
-    glTranslatef(-6.5, -8, 0);
-	glScalef(1.7, 1.7, 0);
+    glTranslatef(-4.0, -4.0, 0);
+    glScalef(1.0, 1.0, 0);
+    glRotatef(20, 0.0f, 0.0f, 1.0f);
     Bico();
     Corpo();
     AsaEsquerda();

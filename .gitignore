@@ -1,2 +1,6 @@
-.vscode
-build
+# Arquivos executaveis
+/build
+*.exe
+
+# Arquivos de configuracao
+/.vscode

@@ -18,6 +18,7 @@ GLfloat xi, yi;
 GLfloat hc, hb, hp, hwc;
 GLfloat wc, wb, wp;
 GLfloat aux_hbr, aux_hbl;
+GLboolean toggleColors1, toggleColors2;
 
 // Desenha a cabeca do robo
 void Cabeca()
@@ -110,14 +111,17 @@ void DesenhaRobo()
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Desenha as partes do corpo do robo
-    glColor3f(1, 1, 1);
+    toggleColors1 ? glColor3f(0, 0, 1) : glColor3f(1, 1, 1);
     Cabeca();
-    glColor3f(0, 0, 1);
+
+    toggleColors1 ? glColor3f(1, 1, 1) : glColor3f(0, 0, 1);
     Tronco();
-    glColor3f(1, 0, 0);
+
+    toggleColors2 ? glColor3f(1, 1, 0) : glColor3f(1, 0, 0);
     BracoEsquerdo();
     BracoDireito();
-    glColor3f(1, 1, 0);
+
+    toggleColors2 ? glColor3f(1, 0, 0) : glColor3f(1, 1, 0);
     PernaEsquerda();
     PernaDireita();
 
@@ -131,16 +135,12 @@ void Movimentacao(unsigned char key, int x, int y)
     {
     case 'm': // Move o robo pra sua direita
         if (xi > -90)
-        {
             xi -= 5;
-        }
         break;
 
     case 'M': // Move o robo pra sua esquerda
         if (xi < 60)
-        {
             xi += 5;
-        }
         break;
 
     case 'i': // Levanta o braco direito
@@ -163,6 +163,22 @@ void Movimentacao(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+// Função callback chamada para gerenciar eventos do mouse
+void AlterarCores(int button, int state, int x, int y)
+{
+    // Altera as cores dos braços e pernas
+    if (button == GLUT_LEFT_BUTTON)
+        if (state == GLUT_DOWN)
+            toggleColors1 = !toggleColors1;
+
+    // Altera as cores da cabeca e tronco
+    if (button == GLUT_RIGHT_BUTTON)
+        if (state == GLUT_DOWN)
+            toggleColors2 = !toggleColors2;
+
+    glutPostRedisplay();
+}
+
 // Inicializa os parametros de renderizacao e variaveis globais
 void Inicializa()
 {
@@ -179,9 +195,13 @@ void Inicializa()
     hp = 55;  // Altura das pernas
     wp = 12;  // Largura das pernas
 
-    // Variavel auxiliar para movimentacao dos bracos
+    // Variaveis auxiliares para movimentacao dos bracos
     aux_hbr = hb; // Braco direito
     aux_hbl = hb; // Braco esquerdo
+
+    // Variaveis auxiliares para trocar as cores dos membros
+    toggleColors1 = false;
+    toggleColors2 = false;
 
     // Define a janela de visualizacao 2D
     glMatrixMode(GL_PROJECTION);
@@ -210,7 +230,7 @@ int main(int argc, char **argv)
 
     // Registra funcoes de gerenciamento de teclado e mouse
     glutKeyboardFunc(Movimentacao);
-    // glutMouseFunc(GerenciaMouse);
+    glutMouseFunc(AlterarCores);
 
     Inicializa();
     glutMainLoop();

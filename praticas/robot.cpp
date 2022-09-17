@@ -15,77 +15,77 @@
 #include <GL/glut.h>
 
 GLfloat xi, yi;
-GLfloat h_c, h_b, h_p, h_w_c;
-GLfloat w_c, w_b, w_p;
+GLfloat hc, hb, hp, hwc;
+GLfloat wc, wb, wp;
+GLfloat aux_hbr, aux_hbl;
 
 // Desenha a cabeca do robo
 void Cabeca()
 {
-    GLfloat x = xi + (w_c - h_w_c) / 2;
-    GLfloat y = yi + h_c + 1;
+    GLfloat x = xi + (wc - hwc) / 2;
+    GLfloat y = yi + hc + 1;
 
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + h_w_c, y);
-    glVertex2f(x + h_w_c, y + h_w_c);
-    glVertex2f(x, y + h_w_c);
+    glVertex2f(x + hwc, y);
+    glVertex2f(x + hwc, y + hwc);
+    glVertex2f(x, y + hwc);
     glEnd();
 }
 
 // Desenha o braco esquerdo do robo
 void BracoEsquerdo()
 {
-    GLfloat x = xi + w_c - 2;
-    // GLfloat y = yi + h_c - h_b; // braco abaixado
-    GLfloat y = yi + h_c - 2; // braco levantado
+    GLfloat x = xi + wc - 2;
+    GLfloat y = yi + hc - aux_hbl;
 
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + w_b, y);
-    glVertex2f(x + w_b, y + h_b);
-    glVertex2f(x, y + h_b);
+    glVertex2f(x + wb, y);
+    glVertex2f(x + wb, y + hb);
+    glVertex2f(x, y + hb);
     glEnd();
 }
 
 // Desenha o braco direito do robo
 void BracoDireito()
 {
-    GLfloat x = xi - w_b + 2;
-    GLfloat y = yi + h_c - h_b;
+    GLfloat x = xi - wb + 2;
+    GLfloat y = yi + hc - aux_hbr;
 
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + w_b, y);
-    glVertex2f(x + w_b, y + h_b);
-    glVertex2f(x, y + h_b);
+    glVertex2f(x + wb, y);
+    glVertex2f(x + wb, y + hb);
+    glVertex2f(x, y + hb);
     glEnd();
 }
 
-// Desenha o corpo do robo
-void Corpo()
+// Desenha o tronco do robo
+void Tronco()
 {
     GLfloat x = xi;
     GLfloat y = yi;
 
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + w_c, y);
-    glVertex2f(x + w_c, y + h_c);
-    glVertex2f(x, y + h_c);
+    glVertex2f(x + wc, y);
+    glVertex2f(x + wc, y + hc);
+    glVertex2f(x, y + hc);
     glEnd();
 }
 
 // Desenha a perna esquerda do robo
 void PernaEsquerda()
 {
-    GLfloat x = xi + w_c - w_p;
-    GLfloat y = yi - h_p - 1;
+    GLfloat x = xi + wc - wp;
+    GLfloat y = yi - hp - 1;
 
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + w_p, y);
-    glVertex2f(x + w_p, y + h_p);
-    glVertex2f(x, y + h_p);
+    glVertex2f(x + wp, y);
+    glVertex2f(x + wp, y + hp);
+    glVertex2f(x, y + hp);
     glEnd();
 }
 
@@ -93,13 +93,13 @@ void PernaEsquerda()
 void PernaDireita()
 {
     GLfloat x = xi;
-    GLfloat y = yi - h_p - 1;
+    GLfloat y = yi - hp - 1;
 
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + w_p, y);
-    glVertex2f(x + w_p, y + h_p);
-    glVertex2f(x, y + h_p);
+    glVertex2f(x + wp, y);
+    glVertex2f(x + wp, y + hp);
+    glVertex2f(x, y + hp);
     glEnd();
 }
 
@@ -113,7 +113,7 @@ void DesenhaRobo()
     glColor3f(1, 1, 1);
     Cabeca();
     glColor3f(0, 0, 1);
-    Corpo();
+    Tronco();
     glColor3f(1, 0, 0);
     BracoEsquerdo();
     BracoDireito();
@@ -124,21 +124,64 @@ void DesenhaRobo()
     glFlush();
 }
 
+// Funcao callback chamada para movimentar o robo
+void Movimentacao(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'm': // Move o robo pra sua direita
+        if (xi > -90)
+        {
+            xi -= 5;
+        }
+        break;
+
+    case 'M': // Move o robo pra sua esquerda
+        if (xi < 60)
+        {
+            xi += 5;
+        }
+        break;
+
+    case 'i': // Levanta o braco direito
+        aux_hbr = 2;
+        break;
+
+    case 'I': // Abaixa o braco direito
+        aux_hbr = hb;
+        break;
+
+    case 'p': // Levanta o braco esquerdo
+        aux_hbl = 2;
+        break;
+
+    case 'P': // Abaixa o braco esquerdo
+        aux_hbl = hb;
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
 // Inicializa os parametros de renderizacao e variaveis globais
 void Inicializa()
 {
-    // Ponto de referencia inicial (base do corpo)
+    // Ponto de referencia inicial (base do tronco)
     xi = -15;
     yi = -30;
 
     // Dimensoes das partes do corpo
-    h_c = 60;   // Altura do corpo
-    w_c = 30;   // Largura do corpo
-    h_w_c = 20; // Altura e largura da cabeca
-    h_b = 50;   // Altura dos bracos
-    w_b = 11;   // Largura dos bracos
-    h_p = 55;   // Altura das pernas
-    w_p = 12;   // Largura das pernas
+    hc = 60;  // Altura do tronco
+    wc = 30;  // Largura do tronco
+    hwc = 20; // Altura e largura da cabeca
+    hb = 50;  // Altura dos bracos
+    wb = 11;  // Largura dos bracos
+    hp = 55;  // Altura das pernas
+    wp = 12;  // Largura das pernas
+
+    // Variavel auxiliar para movimentacao dos bracos
+    aux_hbr = hb; // Braco direito
+    aux_hbl = hb; // Braco esquerdo
 
     // Define a janela de visualizacao 2D
     glMatrixMode(GL_PROJECTION);
@@ -166,9 +209,8 @@ int main(int argc, char **argv)
     glutDisplayFunc(DesenhaRobo);
 
     // Registra funcoes de gerenciamento de teclado e mouse
-    // glutKeyboardFunc(GerenciaTeclado);
+    glutKeyboardFunc(Movimentacao);
     // glutMouseFunc(GerenciaMouse);
-    // glutSpecialFunc(TeclasEspeciais);
 
     Inicializa();
     glutMainLoop();

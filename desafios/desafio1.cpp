@@ -1,8 +1,14 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 
-GLint hp;
-GLfloat xi, yi, xv, yv, xf, yf;
+struct Point
+{
+    int x;
+    int y;
+};
+
+int hp;
+Point startPoint, currentPoint, hpStartPoint;
 
 // Desenha o bico do foguete
 void Bico(GLfloat x, GLfloat y)
@@ -53,8 +59,6 @@ void AsaDireita(GLfloat x, GLfloat y)
 void DesenhaFoguete(GLfloat x, GLfloat y)
 {
     glPushMatrix();
-    // glTranslatef(-6.5, -8, 0);
-    // glScalef(scale, scale, 0);
     Bico(x, y);
     Corpo(x, y);
     AsaEsquerda(x, y);
@@ -64,7 +68,8 @@ void DesenhaFoguete(GLfloat x, GLfloat y)
 }
 
 // Desenha o quadro onde o foguete pode se movimentar
-void DesenhaQuadro(){
+void DesenhaQuadro()
+{
     glLineWidth(7.0);
     glBegin(GL_LINE_LOOP);
     glColor3f(1, 1, 1);
@@ -86,17 +91,18 @@ void Desenha()
     DesenhaQuadro();
 
     // Desenha o foguete do jogador
-    DesenhaFoguete(xf, yf);
+    DesenhaFoguete(currentPoint.x, currentPoint.y);
 
     // Desenha os foguetes das vidas
-    DesenhaFoguete(xv, yv);
-    DesenhaFoguete(xv - 13, yv);
-    DesenhaFoguete(xv - 26, yv);
+    DesenhaFoguete(hpStartPoint.x, hpStartPoint.y);
+    DesenhaFoguete(hpStartPoint.x - 13, hpStartPoint.y);
+    DesenhaFoguete(hpStartPoint.x - 26, hpStartPoint.y);
 }
 
 // Funcao callback chamada para gerenciar eventos de teclas
 void Teclado(unsigned char key, int x, int y)
 {
+    // Tecla 'ESC' para encerrar o programa
     if (key == 27)
         exit(0);
 }
@@ -104,21 +110,21 @@ void Teclado(unsigned char key, int x, int y)
 // Funcao callback chamada para movimentar o foguete
 void Movimentacao(int key, int x, int y)
 {
-    if (key == GLUT_KEY_UP && yf < 60)
+    if (key == GLUT_KEY_UP && currentPoint.y < 60)
     {
-        yf += 5;
+        currentPoint.y += 5;
     }
-    if (key == GLUT_KEY_DOWN && yf > yi)
+    if (key == GLUT_KEY_DOWN && currentPoint.y > startPoint.y)
     {
-        yf -= 5;
+        currentPoint.y -= 5;
     }
-    if (key == GLUT_KEY_LEFT && xf > -90)
+    if (key == GLUT_KEY_LEFT && currentPoint.x > -90)
     {
-        xf -= 5;
+        currentPoint.x -= 5;
     }
-    if (key == GLUT_KEY_RIGHT && xf < 85)
+    if (key == GLUT_KEY_RIGHT && currentPoint.x < 85)
     {
-        xf += 5;
+        currentPoint.x += 5;
     }
     glutPostRedisplay();
 }
@@ -130,16 +136,16 @@ void Inicializa(void)
     hp = 3;
 
     // Posicao inicial do foguete
-    xi = 0;
-    yi = -90;
+    startPoint.x = 0;
+    startPoint.y = -90;
 
     // Posicao atual do foguete
-    xf = xi;
-    yf = yi;
+    currentPoint.x = startPoint.x;
+    currentPoint.y = startPoint.y;
 
     // Posicao inicial do foguete das vidas
-    xv = 90;
-    yv = 83;
+    hpStartPoint.x = 90;
+    hpStartPoint.y = 83;
 
     // Define a janela de visualizacao 2D
     glMatrixMode(GL_PROJECTION);

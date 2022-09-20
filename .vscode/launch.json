@@ -4,7 +4,7 @@
             "name": "(gdb) Iniciar",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\build\\exSimples.exe",
+            "program": "${workspaceFolder}\\build\\desafio1.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

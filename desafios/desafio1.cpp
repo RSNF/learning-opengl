@@ -1,14 +1,30 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 
-struct Point
+struct Color
 {
-    int x;
-    int y;
+    GLfloat r;
+    GLfloat g;
+    GLfloat b;
 };
 
-int hp;
+struct Point
+{
+    GLfloat x;
+    GLfloat y;
+};
+
+struct Object
+{
+    Color color;
+    Point point;
+    GLfloat width;
+    GLfloat height;
+};
+
+int hp, qntObstaculos;
 Point startPoint, currentPoint, hpStartPoint;
+Object obstaculos[10];
 
 // Desenha o bico do foguete
 void Bico(GLfloat x, GLfloat y)
@@ -58,13 +74,10 @@ void AsaDireita(GLfloat x, GLfloat y)
 // Funcao para desenhar um foguete
 void DesenhaFoguete(GLfloat x, GLfloat y)
 {
-    glPushMatrix();
     Bico(x, y);
     Corpo(x, y);
     AsaEsquerda(x, y);
     AsaDireita(x, y);
-    glPopMatrix();
-    glFlush();
 }
 
 // Desenha o quadro onde o foguete pode se movimentar
@@ -77,6 +90,29 @@ void DesenhaQuadro()
     glVertex2f(95, -95);
     glVertex2f(95, 78);
     glVertex2f(-95, 78);
+    glEnd();
+}
+
+// Desenha um obstaculo (quadrado) na tela
+void DesenhaObstaculo(Object obj)
+{
+    // Desenha o obstaculo
+    glBegin(GL_QUADS);
+    glColor3f(obj.color.r, obj.color.g, obj.color.b);
+    glVertex2f(obj.point.x, obj.point.y);
+    glVertex2f(obj.point.x + obj.width, obj.point.y);
+    glVertex2f(obj.point.x + obj.width, obj.point.y + obj.height);
+    glVertex2f(obj.point.x, obj.point.y + obj.height);
+    glEnd();
+
+    // Desenha a linha da borda do obstaculo
+    glLineWidth(2.0);
+    glBegin(GL_LINE_LOOP);
+    glColor3f(1, 0, 0);
+    glVertex2f(obj.point.x, obj.point.y);
+    glVertex2f(obj.point.x + obj.width, obj.point.y);
+    glVertex2f(obj.point.x + obj.width, obj.point.y + obj.height);
+    glVertex2f(obj.point.x, obj.point.y + obj.height);
     glEnd();
 }
 
@@ -97,6 +133,12 @@ void Desenha()
     DesenhaFoguete(hpStartPoint.x, hpStartPoint.y);
     DesenhaFoguete(hpStartPoint.x - 13, hpStartPoint.y);
     DesenhaFoguete(hpStartPoint.x - 26, hpStartPoint.y);
+
+    // Desenha os obstaculos
+    for (int i = 0; i < qntObstaculos; i++)
+        DesenhaObstaculo(obstaculos[i]);
+
+    glFlush();
 }
 
 // Funcao callback chamada para gerenciar eventos de teclas
@@ -129,6 +171,28 @@ void Movimentacao(int key, int x, int y)
     glutPostRedisplay();
 }
 
+// Funcao responsavel por definir os obstaculos
+Object InicializaObstaculo(GLfloat x, GLfloat y, GLfloat h, GLfloat w,
+                           GLfloat r, GLfloat g, GLfloat b)
+{
+    Object obs;
+
+    // Posicao do obstaculo
+    obs.point.x = x;
+    obs.point.y = y;
+
+    // Dimensoes
+    obs.height = h;
+    obs.width = w;
+
+    // Cor
+    obs.color.r = r;
+    obs.color.g = g;
+    obs.color.b = b;
+
+    return obs;
+}
+
 // Funcao responsavel por inicializar parametros e variaveis
 void Inicializa(void)
 {
@@ -139,13 +203,23 @@ void Inicializa(void)
     startPoint.x = 0;
     startPoint.y = -90;
 
+    // Posicao inicial do foguete das vidas
+    hpStartPoint.x = 90;
+    hpStartPoint.y = 83;
+
     // Posicao atual do foguete
     currentPoint.x = startPoint.x;
     currentPoint.y = startPoint.y;
 
-    // Posicao inicial do foguete das vidas
-    hpStartPoint.x = 90;
-    hpStartPoint.y = 83;
+    // Obstaculos
+    obstaculos[0] = InicializaObstaculo(10, 10, 10, 10, 1, 1, 0);
+    obstaculos[1] = InicializaObstaculo(30, 40, 10, 10, 1, 1, 0);
+    obstaculos[2] = InicializaObstaculo(-50, -10, 10, 10, 1, 1, 0);
+    obstaculos[3] = InicializaObstaculo(-20, 10, 10, 10, 1, 1, 0);
+    obstaculos[4] = InicializaObstaculo(-10, -60, 10, 30, 1, 1, 0);
+    obstaculos[5] = InicializaObstaculo(-40, -70, 40, 10, 1, 1, 0);
+
+    qntObstaculos = 6;
 
     // Define a janela de visualizacao 2D
     glMatrixMode(GL_PROJECTION);

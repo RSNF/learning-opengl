@@ -20,87 +20,14 @@ GLfloat wc, wb, wp;
 GLfloat aux_hbr, aux_hbl;
 GLboolean toggleColors1, toggleColors2;
 
-// Desenha a cabeca do robo
-void Cabeca()
+// Desenha um quadrado de acordo com uma posicao inicial e suas dimensoes
+void DesenhaQuadrado(GLfloat x, GLfloat y, GLfloat width, GLfloat heigth)
 {
-    GLfloat x = xi + (wc - hwc) / 2;
-    GLfloat y = yi + hc + 1;
-
     glBegin(GL_QUADS);
     glVertex2f(x, y);
-    glVertex2f(x + hwc, y);
-    glVertex2f(x + hwc, y + hwc);
-    glVertex2f(x, y + hwc);
-    glEnd();
-}
-
-// Desenha o braco esquerdo do robo
-void BracoEsquerdo()
-{
-    GLfloat x = xi + wc - 2;
-    GLfloat y = yi + hc - aux_hbl;
-
-    glBegin(GL_QUADS);
-    glVertex2f(x, y);
-    glVertex2f(x + wb, y);
-    glVertex2f(x + wb, y + hb);
-    glVertex2f(x, y + hb);
-    glEnd();
-}
-
-// Desenha o braco direito do robo
-void BracoDireito()
-{
-    GLfloat x = xi - wb + 2;
-    GLfloat y = yi + hc - aux_hbr;
-
-    glBegin(GL_QUADS);
-    glVertex2f(x, y);
-    glVertex2f(x + wb, y);
-    glVertex2f(x + wb, y + hb);
-    glVertex2f(x, y + hb);
-    glEnd();
-}
-
-// Desenha o tronco do robo
-void Tronco()
-{
-    GLfloat x = xi;
-    GLfloat y = yi;
-
-    glBegin(GL_QUADS);
-    glVertex2f(x, y);
-    glVertex2f(x + wc, y);
-    glVertex2f(x + wc, y + hc);
-    glVertex2f(x, y + hc);
-    glEnd();
-}
-
-// Desenha a perna esquerda do robo
-void PernaEsquerda()
-{
-    GLfloat x = xi + wc - wp;
-    GLfloat y = yi - hp - 1;
-
-    glBegin(GL_QUADS);
-    glVertex2f(x, y);
-    glVertex2f(x + wp, y);
-    glVertex2f(x + wp, y + hp);
-    glVertex2f(x, y + hp);
-    glEnd();
-}
-
-// Desenha a perna direita do robo
-void PernaDireita()
-{
-    GLfloat x = xi;
-    GLfloat y = yi - hp - 1;
-
-    glBegin(GL_QUADS);
-    glVertex2f(x, y);
-    glVertex2f(x + wp, y);
-    glVertex2f(x + wp, y + hp);
-    glVertex2f(x, y + hp);
+    glVertex2f(x + width, y);
+    glVertex2f(x + width, y + heigth);
+    glVertex2f(x, y + heigth);
     glEnd();
 }
 
@@ -110,20 +37,23 @@ void DesenhaRobo()
     // Define a cor de background (preta)
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Desenha as partes do corpo do robo
+    // Desenha a cabeca do robot
     toggleColors1 ? glColor3f(0, 0, 1) : glColor3f(1, 1, 1);
-    Cabeca();
+    DesenhaQuadrado(xi + (wc - hwc) / 2, yi + hc + 1, hwc, hwc);
 
+    // Desenha o tronco do robot
     toggleColors1 ? glColor3f(1, 1, 1) : glColor3f(0, 0, 1);
-    Tronco();
+    DesenhaQuadrado(xi, yi, wc, hc);
 
+    // Desenha os bracos do robot
     toggleColors2 ? glColor3f(1, 1, 0) : glColor3f(1, 0, 0);
-    BracoEsquerdo();
-    BracoDireito();
+    DesenhaQuadrado(xi + wc - 2, yi + hc - aux_hbl, wb, hb);
+    DesenhaQuadrado(xi - wb + 2, yi + hc - aux_hbr, wb, hb);
 
+    // Desenha as pernas do robot
     toggleColors2 ? glColor3f(1, 0, 0) : glColor3f(1, 1, 0);
-    PernaEsquerda();
-    PernaDireita();
+    DesenhaQuadrado(xi, yi - hp - 1, wp, hp);
+    DesenhaQuadrado(xi + wc - wp, yi - hp - 1, wp, hp);
 
     glFlush();
 }

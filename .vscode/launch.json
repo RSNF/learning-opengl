@@ -4,7 +4,7 @@
             "name": "(gdb) Iniciar",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\build\\desafio1.exe",
+            "program": "${workspaceFolder}\\build\\robot.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

@@ -1,22 +1,23 @@
-// ************************************************
-//
-// Universidade Estadual do Sudoeste da Bahia
-// Disciplina: Computacao Grafica
-// Docente: Elienai Bittencourt
-// Aluno: William Jefferson Silva Sena
-//
-// robot.cpp
-// Programa OpenGL que desenha um robo e simula o
-// movimento dos bracos e do corpo, utilizando
-// gerenciamento de eventos de mouse e teclado
-//
-// ************************************************
+/*
+ * ************************************************
+ * Universidade Estadual do Sudoeste da Bahia
+ * Disciplina: Computacao Grafica
+ * Docente: Elienai Bittencourt
+ * Aluno: William Jefferson Silva Sena
+ *
+ * robot.cpp
+ * Programa OpenGL que desenha um robo e simula o
+ * movimento dos bracos e do corpo, utilizando
+ * gerenciamento de eventos de mouse e teclado
+ *
+ * ************************************************
+ */
 
 #include <GL/glut.h>
 
 GLfloat xi, yi;
-GLfloat hc, hb, hp, hwc;
-GLfloat wc, wb, wp;
+GLfloat ht, hb, hp, hwc;
+GLfloat wt, wb, wp;
 GLfloat aux_hbr, aux_hbl;
 GLboolean toggleColors1, toggleColors2;
 
@@ -39,21 +40,21 @@ void DesenhaRobo()
 
     // Desenha a cabeca do robot
     toggleColors1 ? glColor3f(0, 0, 1) : glColor3f(1, 1, 1);
-    DesenhaQuadrado(xi + (wc - hwc) / 2, yi + hc + 1, hwc, hwc);
+    DesenhaQuadrado(xi + (wt - hwc) / 2, yi + ht + 1, hwc, hwc);
 
     // Desenha o tronco do robot
     toggleColors1 ? glColor3f(1, 1, 1) : glColor3f(0, 0, 1);
-    DesenhaQuadrado(xi, yi, wc, hc);
+    DesenhaQuadrado(xi, yi, wt, ht);
 
     // Desenha os bracos do robot
     toggleColors2 ? glColor3f(1, 1, 0) : glColor3f(1, 0, 0);
-    DesenhaQuadrado(xi + wc - 2, yi + hc - aux_hbl, wb, hb);
-    DesenhaQuadrado(xi - wb + 2, yi + hc - aux_hbr, wb, hb);
+    DesenhaQuadrado(xi + wt - 2, yi + ht - aux_hbl, wb, hb);
+    DesenhaQuadrado(xi - wb + 2, yi + ht - aux_hbr, wb, hb);
 
     // Desenha as pernas do robot
     toggleColors2 ? glColor3f(1, 0, 0) : glColor3f(1, 1, 0);
     DesenhaQuadrado(xi, yi - hp - 1, wp, hp);
-    DesenhaQuadrado(xi + wc - wp, yi - hp - 1, wp, hp);
+    DesenhaQuadrado(xi + wt - wp, yi - hp - 1, wp, hp);
 
     glFlush();
 }
@@ -117,8 +118,8 @@ void Inicializa()
     yi = -30;
 
     // Dimensoes das partes do corpo
-    hc = 60;  // Altura do tronco
-    wc = 30;  // Largura do tronco
+    ht = 60;  // Altura do tronco
+    wt = 30;  // Largura do tronco
     hwc = 20; // Altura e largura da cabeca
     hb = 50;  // Altura dos bracos
     wb = 11;  // Largura dos bracos

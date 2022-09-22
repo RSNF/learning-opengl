@@ -25,6 +25,7 @@ struct Foguete
 
 // Variaveis globais
 int hp, qntObstaculos;
+bool houveColisao;
 Point moveFoguete;
 Foguete foguete, fogueteVidas;
 Object obstaculos[10];
@@ -168,31 +169,31 @@ void Desenha()
     glFlush();
 }
 
-// Funcao para verificar a colisao entre o foguete e um obstaculo
-void VerificaColisao(Object obs)
+// Funcao para verificar a colisao entre uma parte do foguete e um obstaculo
+void VerificaColisao(Object f, Object obs)
 {
-    Object f;
     Point p;
 
-    // Verifica colisao com o corpo do foguete
-    f = foguete.corpo;
+    // Define o ponto de referencia dessa parte do foguete
     p.x = f.x + moveFoguete.x;
     p.y = f.y + moveFoguete.y;
 
+    // Verifica se alguma das extremidades da parte estao em choque com o obstaculo
     if (((p.x <= obs.x + obs.width && p.x >= obs.x) ||
          (p.x + f.width <= obs.x + obs.width && p.x + f.width >= obs.x)) &&
         ((p.y <= obs.y + obs.height && p.y >= obs.y) ||
          (p.y + f.height <= obs.y + obs.height && p.y + f.height >= obs.y)))
     {
-        // Volta para o ponto inicial
+        // Volta o foguete para o ponto inicial
         moveFoguete.x = 0;
         moveFoguete.y = 0;
 
-        // E perde uma vida
+        // O jogador perde uma vida
         if (hp > 0)
             hp--;
 
-        glutPostRedisplay();
+        // Seta o verificador de colisao como true
+        houveColisao = true;
     }
 }
 
@@ -221,8 +222,17 @@ void Movimentacao(int key, int x, int y)
 
     // Verifica a colisao do foguete com todos os obstaculos
     for (int i = 0; i < qntObstaculos; i++)
-        VerificaColisao(obstaculos[i]);
+    {
+        houveColisao = false;
+        VerificaColisao(foguete.bico, obstaculos[i]);
+        VerificaColisao(foguete.corpo, obstaculos[i]);
+        VerificaColisao(foguete.asaEsq, obstaculos[i]);
+        VerificaColisao(foguete.asaDir, obstaculos[i]);
+        if (houveColisao)
+            break;
+    }
 
+    // Faz o redesenho da tela
     glutPostRedisplay();
 }
 

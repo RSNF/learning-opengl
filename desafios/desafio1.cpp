@@ -38,6 +38,7 @@ void DesenhaFoguete(Foguete foguete);
 void DesenhaQuadro();
 void DesenhaObstaculo(Object obj);
 void Desenha();
+void VerificaColisao(Object obs);
 void Teclado(unsigned char key, int x, int y);
 void Movimentacao(int key, int x, int y);
 Object InicializaObjeto(
@@ -167,6 +168,34 @@ void Desenha()
     glFlush();
 }
 
+// Funcao para verificar a colisao entre o foguete e um obstaculo
+void VerificaColisao(Object obs)
+{
+    Object f;
+    Point p;
+
+    // Verifica colisao com o corpo do foguete
+    f = foguete.corpo;
+    p.x = f.x + moveFoguete.x;
+    p.y = f.y + moveFoguete.y;
+
+    if (((p.x <= obs.x + obs.width && p.x >= obs.x) ||
+         (p.x + f.width <= obs.x + obs.width && p.x + f.width >= obs.x)) &&
+        ((p.y <= obs.y + obs.height && p.y >= obs.y) ||
+         (p.y + f.height <= obs.y + obs.height && p.y + f.height >= obs.y)))
+    {
+        // Volta para o ponto inicial
+        moveFoguete.x = 0;
+        moveFoguete.y = 0;
+
+        // E perde uma vida
+        if (hp > 0)
+            hp--;
+
+        glutPostRedisplay();
+    }
+}
+
 // Funcao callback chamada para gerenciar eventos de teclas
 void Teclado(unsigned char key, int x, int y)
 {
@@ -189,6 +218,10 @@ void Movimentacao(int key, int x, int y)
 
     if (key == GLUT_KEY_RIGHT && moveFoguete.x < 85)
         moveFoguete.x += 5;
+
+    // Verifica a colisao do foguete com todos os obstaculos
+    for (int i = 0; i < qntObstaculos; i++)
+        VerificaColisao(obstaculos[i]);
 
     glutPostRedisplay();
 }

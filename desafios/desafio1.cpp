@@ -281,15 +281,32 @@ void Inicializa(void)
     fogueteVidas.asaEsq = InicializaObjeto(100, 83, 4, 3);
     fogueteVidas.asaDir = InicializaObjeto(107, 83, 4, 3);
 
-    // Dimensoes dos obstaculos
-    obstaculos[0] = InicializaObjeto(10, 10, 10, 10);
-    obstaculos[1] = InicializaObjeto(30, 40, 10, 10);
-    obstaculos[2] = InicializaObjeto(-50, -10, 10, 10);
-    obstaculos[3] = InicializaObjeto(-20, 10, 10, 10);
-    obstaculos[4] = InicializaObjeto(-10, -60, 10, 30);
-    obstaculos[5] = InicializaObjeto(-40, -70, 40, 10);
+    obstaculos[0] = InicializaObjeto(-60, -40, 10, 40);
+    obstaculos[1] = InicializaObjeto(-20, -40, 40, 10);
+    obstaculos[2] = InicializaObjeto(20, -40, 10, 40);
+    obstaculos[3] = InicializaObjeto(60, -40, 10, 32);
 
-    qntObstaculos = 6;
+    obstaculos[4] = InicializaObjeto(-80, 0, 10, 40);
+    obstaculos[5] = InicializaObjeto(-20, 0, 10, 40);
+    obstaculos[6] = InicializaObjeto(20, 0, 40, 10);
+    obstaculos[7] = InicializaObjeto(60, 0, 10, 32);
+
+    obstaculos[8] = InicializaObjeto(-80, 40, 10, 40);
+    obstaculos[9] = InicializaObjeto(-40, 40, 10, 40);
+    obstaculos[10] = InicializaObjeto(20, 40, 10, 20);
+    obstaculos[11] = InicializaObjeto(60, 40, 10, 32);
+
+    obstaculos[12] = InicializaObjeto(-92, 40, 10, 20);
+
+    // Dimensoes dos obstaculos
+    // obstaculos[0] = InicializaObjeto(10, 10, 10, 10);
+    // obstaculos[1] = InicializaObjeto(30, 40, 10, 10);
+    // obstaculos[2] = InicializaObjeto(-50, -10, 10, 10);
+    // obstaculos[3] = InicializaObjeto(-20, 10, 10, 10);
+    // obstaculos[4] = InicializaObjeto(-10, -60, 10, 30);
+    // obstaculos[5] = InicializaObjeto(-40, -70, 40, 10);
+
+    qntObstaculos = 13;
 
     // Define a janela de visualizacao 2D
     glMatrixMode(GL_PROJECTION);

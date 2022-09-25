@@ -25,7 +25,7 @@ struct Foguete
 
 // Variaveis globais
 int hp, qntObstaculos;
-bool houveColisao;
+bool houveColisao, win;
 Point moveFoguete;
 Foguete foguete, fogueteVidas;
 Object obstaculos[10];
@@ -163,8 +163,9 @@ void Desenha()
     glPopMatrix();
 
     // Desenha os obstaculos
-    for (int i = 0; i < qntObstaculos; i++)
-        DesenhaObstaculo(obstaculos[i]);
+    if (!win)
+        for (int i = 0; i < qntObstaculos; i++)
+            DesenhaObstaculo(obstaculos[i]);
 
     glFlush();
 }
@@ -203,6 +204,20 @@ void Teclado(unsigned char key, int x, int y)
     // Tecla 'ESC' para encerrar o programa
     if (key == 27)
         exit(0);
+
+    // Tecla 'R' para reiniciar o jogo
+    if (key == 'r' || key == 'R')
+    {
+        hp = 3;
+        win = false;
+
+        // Volta para a posicao inicial
+        moveFoguete.x = 0;
+        moveFoguete.y = 0;
+
+        // Faz o redesenho da tela
+        glutPostRedisplay();
+    }
 }
 
 // Funcao callback chamada para movimentar o foguete
@@ -220,16 +235,23 @@ void Movimentacao(int key, int x, int y)
     if (key == GLUT_KEY_RIGHT && moveFoguete.x < 85)
         moveFoguete.x += 5;
 
+    // Verifica se o foguete chegou na linha de chegada
+    if (moveFoguete.y == 150)
+        win = true;
+
     // Verifica a colisao do foguete com todos os obstaculos
-    for (int i = 0; i < qntObstaculos; i++)
+    else if (win == false)
     {
-        houveColisao = false;
-        VerificaColisao(foguete.bico, obstaculos[i]);
-        VerificaColisao(foguete.corpo, obstaculos[i]);
-        VerificaColisao(foguete.asaEsq, obstaculos[i]);
-        VerificaColisao(foguete.asaDir, obstaculos[i]);
-        if (houveColisao)
-            break;
+        for (int i = 0; i < qntObstaculos; i++)
+        {
+            houveColisao = false;
+            VerificaColisao(foguete.bico, obstaculos[i]);
+            VerificaColisao(foguete.corpo, obstaculos[i]);
+            VerificaColisao(foguete.asaEsq, obstaculos[i]);
+            VerificaColisao(foguete.asaDir, obstaculos[i]);
+            if (houveColisao)
+                break;
+        }
     }
 
     // Faz o redesenho da tela
@@ -281,6 +303,7 @@ void Inicializa(void)
     fogueteVidas.asaEsq = InicializaObjeto(100, 83, 4, 3);
     fogueteVidas.asaDir = InicializaObjeto(107, 83, 4, 3);
 
+    // Posicao e dimensoes dos obstaculos
     obstaculos[0] = InicializaObjeto(-60, -40, 10, 40);
     obstaculos[1] = InicializaObjeto(-20, -40, 40, 10);
     obstaculos[2] = InicializaObjeto(20, -40, 10, 40);
@@ -297,14 +320,6 @@ void Inicializa(void)
     obstaculos[11] = InicializaObjeto(60, 40, 10, 32);
 
     obstaculos[12] = InicializaObjeto(-92, 40, 10, 20);
-
-    // Dimensoes dos obstaculos
-    // obstaculos[0] = InicializaObjeto(10, 10, 10, 10);
-    // obstaculos[1] = InicializaObjeto(30, 40, 10, 10);
-    // obstaculos[2] = InicializaObjeto(-50, -10, 10, 10);
-    // obstaculos[3] = InicializaObjeto(-20, 10, 10, 10);
-    // obstaculos[4] = InicializaObjeto(-10, -60, 10, 30);
-    // obstaculos[5] = InicializaObjeto(-40, -70, 40, 10);
 
     qntObstaculos = 13;
 

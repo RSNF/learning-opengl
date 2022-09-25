@@ -1,3 +1,28 @@
+/*
+ * ************************************************
+ * Universidade Estadual do Sudoeste da Bahia
+ * Disciplina: Computacao Grafica
+ * Docente: Elienai Bittencourt
+ * Alunos: William Jefferson Silva Sena
+ *         Joao Benevides da Silva Neto
+ *
+ * desafio1.cpp
+ * Programa OpenGL que desenha um foguete em um
+ * labirinto. O objetivo eh passar pelo labirinto
+ * sem tocar nos obstaculos. Voce possui 3 (tres)
+ * tentativas, boa sorte!
+ *
+ * Comandos:
+ * Seta p/ esquerda: move o foguete p/ esquerda
+ * Seta p/ direita: move o foguete p/ direita
+ * Seta p/ cima: move o foguete p/ cima
+ * Seta p/ baixo: move o foguete p/ baixo
+ * Tecla 'R': reinicia o jogo
+ * Tecla 'ESC': fecha o programa
+ * 
+ * ************************************************
+ */
+
 #include <stdlib.h>
 #include <GL/glut.h>
 

@@ -201,13 +201,17 @@ void VerificaColisao(Object f, Object obs)
 // Funcao callback chamada para gerenciar eventos de teclas
 void Teclado(unsigned char key, int x, int y)
 {
+    switch (key)
+    {
     // Tecla 'ESC' para encerrar o programa
-    if (key == 27)
+    case 27:
         exit(0);
+        break;
 
     // Tecla 'R' para reiniciar o jogo
-    if (key == 'r' || key == 'R')
-    {
+    case 'r':
+    case 'R':
+        // Restaura as vidas e o estado de vitoria
         hp = 3;
         win = false;
 
@@ -217,6 +221,7 @@ void Teclado(unsigned char key, int x, int y)
 
         // Faz o redesenho da tela
         glutPostRedisplay();
+        break;
     }
 }
 
@@ -287,7 +292,7 @@ void Inicializa(void)
     // Quantidade de vidas/tentativas do jogador
     hp = 3;
 
-    // Valor da translacao inicial do foguete
+    // Valor da translacao e rotacao iniciais do foguete
     moveFoguete.x = 0;
     moveFoguete.y = 0;
 

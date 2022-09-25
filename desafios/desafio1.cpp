@@ -1,94 +1,94 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 
-struct Point
+struct Ponto
 {
     GLfloat x;
     GLfloat y;
 };
 
-struct Object
+struct Objeto
 {
     GLfloat cor[3];
-    GLfloat width;
-    GLfloat height;
-    GLfloat x, y;
+    GLfloat largura;
+    GLfloat altura;
+    Ponto posicao;
 };
 
 struct Foguete
 {
-    Object bico;
-    Object corpo;
-    Object asaEsq;
-    Object asaDir;
+    Objeto bico;
+    Objeto corpo;
+    Objeto asaEsq;
+    Objeto asaDir;
 };
 
 // Variaveis globais
-int hp, qntObstaculos;
-bool houveColisao, win;
-Point moveFoguete;
+int vidas, qntObstaculos;
+bool houveColisao, venceu;
+Ponto moveFoguete;
 Foguete foguete, fogueteVidas;
-Object obstaculos[10];
+Objeto obstaculos[10];
 
 // Prototipos das funcoes
-void Bico(Object obj);
-void Corpo(Object obj);
-void AsaEsquerda(Object obj);
-void AsaDireita(Object obj);
+void Bico(Objeto obj);
+void Corpo(Objeto obj);
+void AsaEsquerda(Objeto obj);
+void AsaDireita(Objeto obj);
 void DesenhaFoguete(Foguete foguete);
 void DesenhaQuadro();
-void DesenhaObstaculo(Object obj);
+void DesenhaObstaculo(Objeto obj);
 void Desenha();
-void VerificaColisao(Object obs);
+void VerificaColisao(Objeto obs);
 void Teclado(unsigned char key, int x, int y);
 void Movimentacao(int key, int x, int y);
-Object InicializaObjeto(
+Objeto InicializaObjeto(
     GLfloat x, GLfloat y, GLfloat h, GLfloat w,
     GLfloat r = 1, GLfloat g = 1, GLfloat b = 0);
 void Inicializa(void);
 
 // Desenha o bico do foguete
-void Bico(Object obj)
+void Bico(Objeto obj)
 {
     glBegin(GL_TRIANGLES);
     glColor3f(0, 1, 0);
-    glVertex2f(obj.x, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y);
-    glVertex2f(obj.x + obj.width / 2, obj.y + obj.height);
+    glVertex2f(obj.posicao.x, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura / 2, obj.posicao.y + obj.altura);
     glEnd();
 }
 
 // Desenha o corpo do foguete
-void Corpo(Object obj)
+void Corpo(Objeto obj)
 {
     glBegin(GL_QUADS);
     glColor3f(0, 0, 1);
-    glVertex2f(obj.x, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y + obj.height);
-    glVertex2f(obj.x, obj.y + obj.height);
+    glVertex2f(obj.posicao.x, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y + obj.altura);
+    glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
     glEnd();
 }
 
 // Desenha a asa esquerda do foguete
-void AsaEsquerda(Object obj)
+void AsaEsquerda(Objeto obj)
 {
     glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
-    glVertex2f(obj.x, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y + obj.height);
+    glVertex2f(obj.posicao.x, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y + obj.altura);
     glEnd();
 }
 
 // Desenha a asa direita do foguete
-void AsaDireita(Object obj)
+void AsaDireita(Objeto obj)
 {
     glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
-    glVertex2f(obj.x, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y);
-    glVertex2f(obj.x, obj.y + obj.height);
+    glVertex2f(obj.posicao.x, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
+    glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
     glEnd();
 }
 
@@ -115,25 +115,25 @@ void DesenhaQuadro()
 }
 
 // Desenha um obstaculo (quadrado) na tela
-void DesenhaObstaculo(Object obj)
+void DesenhaObstaculo(Objeto obj)
 {
     // Desenha o obstaculo
     glBegin(GL_QUADS);
     glColor3f(obj.cor[0], obj.cor[1], obj.cor[2]);
-    glVertex2f(obj.x, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y + obj.height);
-    glVertex2f(obj.x, obj.y + obj.height);
+    glVertex2f(obj.posicao.x, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y + obj.altura);
+    glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
     glEnd();
 
     // Desenha a linha da borda do obstaculo
     glLineWidth(2.0);
     glBegin(GL_LINE_LOOP);
     glColor3f(1, 0, 0);
-    glVertex2f(obj.x, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y);
-    glVertex2f(obj.x + obj.width, obj.y + obj.height);
-    glVertex2f(obj.x, obj.y + obj.height);
+    glVertex2f(obj.posicao.x, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
+    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y + obj.altura);
+    glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
     glEnd();
 }
 
@@ -155,7 +155,7 @@ void Desenha()
 
     // Desenha os foguetes das vidas
     glPushMatrix();
-    for (int i = 0; i < hp; i++)
+    for (int i = 0; i < vidas; i++)
     {
         glTranslatef(-13, 0, 0);
         DesenhaFoguete(fogueteVidas);
@@ -163,7 +163,7 @@ void Desenha()
     glPopMatrix();
 
     // Desenha os obstaculos
-    if (!win)
+    if (!venceu)
         for (int i = 0; i < qntObstaculos; i++)
             DesenhaObstaculo(obstaculos[i]);
 
@@ -171,27 +171,37 @@ void Desenha()
 }
 
 // Funcao para verificar a colisao entre uma parte do foguete e um obstaculo
-void VerificaColisao(Object f, Object obs)
+void VerificaColisao(Objeto fog, Objeto obs)
 {
-    Point p;
+    // Define as coordenadas da parte do foguete
+    float coordFoguete[] = {
+        fog.posicao.x + moveFoguete.x,
+        fog.posicao.x + moveFoguete.x + fog.largura,
+        fog.posicao.y + moveFoguete.y,
+        fog.posicao.y + moveFoguete.y + fog.altura
+    };
 
-    // Define o ponto de referencia dessa parte do foguete
-    p.x = f.x + moveFoguete.x;
-    p.y = f.y + moveFoguete.y;
+    // Define as coordenadas do obstaculo
+    float coordObstaculo[] = {
+        obs.posicao.x,
+        obs.posicao.x + obs.largura,
+        obs.posicao.y,
+        obs.posicao.y + obs.altura
+    };
 
-    // Verifica se alguma das extremidades da parte estao em choque com o obstaculo
-    if (((p.x <= obs.x + obs.width && p.x >= obs.x) ||
-         (p.x + f.width <= obs.x + obs.width && p.x + f.width >= obs.x)) &&
-        ((p.y <= obs.y + obs.height && p.y >= obs.y) ||
-         (p.y + f.height <= obs.y + obs.height && p.y + f.height >= obs.y)))
+    // Verifica se alguma das extremidades das partes do foguete colidem com o obstaculo
+    if (((coordFoguete[0] >= coordObstaculo[0] && coordFoguete[0] <= coordObstaculo[1]) ||
+         (coordFoguete[1] >= coordObstaculo[0] && coordFoguete[1] <= coordObstaculo[1])) &&
+        ((coordFoguete[2] >= coordObstaculo[2] && coordFoguete[2] <= coordObstaculo[3]) ||
+         (coordFoguete[3] >= coordObstaculo[2] && coordFoguete[3] <= coordObstaculo[3])))
     {
         // Volta o foguete para o ponto inicial
         moveFoguete.x = 0;
         moveFoguete.y = 0;
 
         // O jogador perde uma vida
-        if (hp > 0)
-            hp--;
+        if (vidas > 0)
+            vidas--;
 
         // Seta o verificador de colisao como true
         houveColisao = true;
@@ -211,9 +221,9 @@ void Teclado(unsigned char key, int x, int y)
     // Tecla 'R' para reiniciar o jogo
     case 'r':
     case 'R':
-        // Restaura as vidas e o estado de vitoria
-        hp = 3;
-        win = false;
+        // Restaura as vidas e o estado de venceu
+        vidas = 3;
+        venceu = false;
 
         // Volta para a posicao inicial
         moveFoguete.x = 0;
@@ -228,24 +238,24 @@ void Teclado(unsigned char key, int x, int y)
 // Funcao callback chamada para movimentar o foguete
 void Movimentacao(int key, int x, int y)
 {
-    if (key == GLUT_KEY_UP && moveFoguete.y < 150)
+    if (key == GLUT_KEY_UP && moveFoguete.y < 150 && vidas > 0)
         moveFoguete.y += 5;
 
-    if (key == GLUT_KEY_DOWN && moveFoguete.y > 0)
+    if (key == GLUT_KEY_DOWN && moveFoguete.y > 0 && vidas > 0)
         moveFoguete.y -= 5;
 
-    if (key == GLUT_KEY_LEFT && moveFoguete.x > -90)
+    if (key == GLUT_KEY_LEFT && moveFoguete.x > -90 && vidas > 0)
         moveFoguete.x -= 5;
 
-    if (key == GLUT_KEY_RIGHT && moveFoguete.x < 85)
+    if (key == GLUT_KEY_RIGHT && moveFoguete.x < 85 && vidas > 0)
         moveFoguete.x += 5;
 
     // Verifica se o foguete chegou na linha de chegada
     if (moveFoguete.y == 150)
-        win = true;
+        venceu = true;
 
     // Verifica a colisao do foguete com todos os obstaculos
-    else if (win == false)
+    else if (venceu == false)
     {
         for (int i = 0; i < qntObstaculos; i++)
         {
@@ -264,19 +274,19 @@ void Movimentacao(int key, int x, int y)
 }
 
 // Funcao responsavel por definir os objetos
-Object InicializaObjeto(
+Objeto InicializaObjeto(
     GLfloat x, GLfloat y, GLfloat h, GLfloat w,
     GLfloat r, GLfloat g, GLfloat b)
 {
-    Object obj;
+    Objeto obj;
 
     // Posicao de referencia
-    obj.x = x;
-    obj.y = y;
+    obj.posicao.x = x;
+    obj.posicao.y = y;
 
     // Dimensoes
-    obj.height = h;
-    obj.width = w;
+    obj.altura = h;
+    obj.largura = w;
 
     // Cor
     obj.cor[0] = r;
@@ -290,7 +300,8 @@ Object InicializaObjeto(
 void Inicializa(void)
 {
     // Quantidade de vidas/tentativas do jogador
-    hp = 3;
+    vidas = 3;
+    venceu = false;
 
     // Valor da translacao e rotacao iniciais do foguete
     moveFoguete.x = 0;

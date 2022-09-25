@@ -53,7 +53,7 @@ int vidas, qntObstaculos;
 bool houveColisao, venceu;
 Ponto moveFoguete;
 Foguete foguete, fogueteVidas;
-Objeto obstaculos[10], bandeira, mastro;
+Objeto obstaculos[13], bandeira, mastro;
 
 // Prototipos das funcoes
 void Bico(Objeto obj);
@@ -140,7 +140,7 @@ void DesenhaQuadro()
     glEnd();
 }
 
-// Desenha um obstaculo (quadrado) na tela
+// Desenha um obstaculo na tela
 void DesenhaObstaculo(Objeto obj)
 {
     // Desenha o obstaculo
@@ -164,12 +164,11 @@ void DesenhaObstaculo(Objeto obj)
 }
 
 // Desenha uma bandeira no topo da tela
-void DesenhaBandeira(char cor)
+void DesenhaBandeira()
 {
-
     // Desenha a bandeira
     glBegin(GL_QUADS);
-    cor == 'g' ? glColor3f(0, 1, 0) : glColor3f(1, 0, 0);
+    glColor3f(bandeira.cor[0], bandeira.cor[1], bandeira.cor[2]);
     glVertex2f(bandeira.posicao.x, bandeira.posicao.y);
     glVertex2f(bandeira.posicao.x + bandeira.largura, bandeira.posicao.y);
     glVertex2f(bandeira.posicao.x + bandeira.largura, bandeira.posicao.y + bandeira.altura);
@@ -216,16 +215,9 @@ void Desenha()
         for (int i = 0; i < qntObstaculos; i++)
             DesenhaObstaculo(obstaculos[i]);
 
-    // Desenha a bandeira verde (Vitoria)
-    if (venceu)
-    {
-        DesenhaBandeira('g');
-    }
-    else if (vidas == 0)
-    {
-        // Mostra bandeira de cor vermelha (Derrota)
-        DesenhaBandeira('r');
-    }
+    // Desenha a bandeira
+    if (venceu || vidas == 0)
+        DesenhaBandeira();
 
     glFlush();
 }
@@ -260,6 +252,14 @@ void VerificaColisao(Objeto fog, Objeto obs)
         // O jogador perde uma vida
         if (vidas > 0)
             vidas--;
+
+        // Caso acabe todas as vidas, define a cor da bandeira como vermelho
+        if (vidas == 0)
+        {
+            bandeira.cor[0] = 1;
+            bandeira.cor[1] = 0;
+            bandeira.cor[2] = 0;
+        }
 
         // Seta o verificador de colisao como true
         houveColisao = true;
@@ -310,7 +310,14 @@ void Movimentacao(int key, int x, int y)
 
     // Verifica se o foguete chegou na linha de chegada
     if (moveFoguete.y == 150)
+    {
         venceu = true;
+
+        // Define a cor da bandeira como verde
+        bandeira.cor[0] = 0;
+        bandeira.cor[1] = 1;
+        bandeira.cor[2] = 0;
+    }
 
     // Verifica a colisao do foguete com todos os obstaculos
     else if (venceu == false)

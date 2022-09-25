@@ -19,7 +19,7 @@
  * Seta p/ baixo: move o foguete p/ baixo
  * Tecla 'R': reinicia o jogo
  * Tecla 'ESC': fecha o programa
- * 
+ *
  * ************************************************
  */
 
@@ -53,7 +53,7 @@ int vidas, qntObstaculos;
 bool houveColisao, venceu;
 Ponto moveFoguete;
 Foguete foguete, fogueteVidas;
-Objeto obstaculos[10];
+Objeto obstaculos[10], bandeira, mastro;
 
 // Prototipos das funcoes
 void Bico(Objeto obj);
@@ -63,6 +63,7 @@ void AsaDireita(Objeto obj);
 void DesenhaFoguete(Foguete foguete);
 void DesenhaQuadro();
 void DesenhaObstaculo(Objeto obj);
+void DesenhaBandeira();
 void Desenha();
 void VerificaColisao(Objeto obs);
 void Teclado(unsigned char key, int x, int y);
@@ -162,6 +163,29 @@ void DesenhaObstaculo(Objeto obj)
     glEnd();
 }
 
+// Desenha uma bandeira no topo da tela
+void DesenhaBandeira(char cor)
+{
+
+    // Desenha a bandeira
+    glBegin(GL_QUADS);
+    cor == 'g' ? glColor3f(0, 1, 0) : glColor3f(1, 0, 0);
+    glVertex2f(bandeira.posicao.x, bandeira.posicao.y);
+    glVertex2f(bandeira.posicao.x + bandeira.largura, bandeira.posicao.y);
+    glVertex2f(bandeira.posicao.x + bandeira.largura, bandeira.posicao.y + bandeira.altura);
+    glVertex2f(bandeira.posicao.x, bandeira.posicao.y + bandeira.altura);
+    glEnd();
+
+    // Haste (mastro) da bandeira
+    glBegin(GL_QUADS);
+    glColor3f(1, 1, 1);
+    glVertex2f(mastro.posicao.x, mastro.posicao.y);
+    glVertex2f(mastro.posicao.x + mastro.largura, mastro.posicao.y);
+    glVertex2f(mastro.posicao.x + mastro.largura, mastro.posicao.y + mastro.altura);
+    glVertex2f(mastro.posicao.x, mastro.posicao.y + mastro.altura);
+    glEnd();
+}
+
 // Função callback de desenho principal
 void Desenha()
 {
@@ -192,6 +216,17 @@ void Desenha()
         for (int i = 0; i < qntObstaculos; i++)
             DesenhaObstaculo(obstaculos[i]);
 
+    // Desenha a bandeira verde (Vitoria)
+    if (venceu)
+    {
+        DesenhaBandeira('g');
+    }
+    else if (vidas == 0)
+    {
+        // Mostra bandeira de cor vermelha (Derrota)
+        DesenhaBandeira('r');
+    }
+
     glFlush();
 }
 
@@ -203,16 +238,14 @@ void VerificaColisao(Objeto fog, Objeto obs)
         fog.posicao.x + moveFoguete.x,
         fog.posicao.x + moveFoguete.x + fog.largura,
         fog.posicao.y + moveFoguete.y,
-        fog.posicao.y + moveFoguete.y + fog.altura
-    };
+        fog.posicao.y + moveFoguete.y + fog.altura};
 
     // Define as coordenadas do obstaculo
     float coordObstaculo[] = {
         obs.posicao.x,
         obs.posicao.x + obs.largura,
         obs.posicao.y,
-        obs.posicao.y + obs.altura
-    };
+        obs.posicao.y + obs.altura};
 
     // Verifica se alguma das extremidades das partes do foguete colidem com o obstaculo
     if (((coordFoguete[0] >= coordObstaculo[0] && coordFoguete[0] <= coordObstaculo[1]) ||
@@ -363,6 +396,10 @@ void Inicializa(void)
     obstaculos[12] = InicializaObjeto(-92, 40, 10, 20);
 
     qntObstaculos = 13;
+
+    // Posicao e dimensoes do mastro e da bandeira de vitoria/derrota
+    bandeira = InicializaObjeto(-10, 84, 14, 20);
+    mastro = InicializaObjeto(10, 80, 18, 3);
 
     // Define a janela de visualizacao 2D
     glMatrixMode(GL_PROJECTION);

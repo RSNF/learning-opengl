@@ -48,77 +48,124 @@ struct Foguete
     Objeto asaDir;
 };
 
+// ***********************************
 // Variaveis globais
+// ***********************************
 int vidas, qntObstaculos;
 bool houveColisao, venceu;
 Ponto moveFoguete;
 Foguete foguete, fogueteVidas;
-Objeto obstaculos[13], bandeira, mastro;
+Objeto obstaculos[20], bandeira, mastro;
 
+// ***********************************
 // Prototipos das funcoes
-void Bico(Objeto obj);
-void Corpo(Objeto obj);
-void AsaEsquerda(Objeto obj);
-void AsaDireita(Objeto obj);
+// ***********************************
+
+// Foguete
+void Bico(Objeto bico);
+void Corpo(Objeto corpo);
+void AsaEsquerda(Objeto asaEsq);
+void AsaDireita(Objeto asaDir);
 void DesenhaFoguete(Foguete foguete);
+
+// Cenario do jogo
 void DesenhaQuadro();
 void DesenhaObstaculo(Objeto obj);
 void DesenhaBandeira();
-void Desenha();
+void Desenha(); // Funcao principal de desenho
+
+// Eventos de teclado e tratamento de colisao
 void VerificaColisao(Objeto obs);
 void Teclado(unsigned char key, int x, int y);
 void Movimentacao(int key, int x, int y);
+
+// Inicializacao dos objetos e variaveis do cenario
 Objeto InicializaObjeto(
     GLfloat x, GLfloat y, GLfloat h, GLfloat w,
     GLfloat r = 1, GLfloat g = 1, GLfloat b = 0);
 void Inicializa(void);
 
+// ***********************************
+// Funcao principal do programa
+// ***********************************
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);                       // Programa Principal
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Define do modo de operacao da GLUT
+    glutInitWindowSize(800, 600);                // tamanho em pixels da janela
+
+    // Centraliza a janela do GLUT
+    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - 800) / 2,
+                           (glutGet(GLUT_SCREEN_HEIGHT) - 600) / 2);
+
+    glutCreateWindow("Foguete"); // Cria a janela
+
+    glutDisplayFunc(Desenha);      // Registra funcao de redesenho
+    glutKeyboardFunc(Teclado);     // Registra funcao de teclado
+    glutSpecialFunc(Movimentacao); // Registra funcao de movimento nas setas
+    Inicializa();                  // Chama a funcao de inicializacoes
+
+    glutMainLoop(); // Inicia o processamento e aguarda interacoes do usuario
+
+    return 0;
+}
+
+// ***********************************
 // Desenha o bico do foguete
-void Bico(Objeto obj)
+// ***********************************
+void Bico(Objeto bico)
 {
     glBegin(GL_TRIANGLES);
     glColor3f(0, 1, 0);
-    glVertex2f(obj.posicao.x, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura / 2, obj.posicao.y + obj.altura);
+    glVertex2f(bico.posicao.x, bico.posicao.y);
+    glVertex2f(bico.posicao.x + bico.largura, bico.posicao.y);
+    glVertex2f(bico.posicao.x + bico.largura / 2, bico.posicao.y + bico.altura);
     glEnd();
 }
 
+// ***********************************
 // Desenha o corpo do foguete
-void Corpo(Objeto obj)
+// ***********************************
+void Corpo(Objeto corpo)
 {
     glBegin(GL_QUADS);
     glColor3f(0, 0, 1);
-    glVertex2f(obj.posicao.x, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y + obj.altura);
-    glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
+    glVertex2f(corpo.posicao.x, corpo.posicao.y);
+    glVertex2f(corpo.posicao.x + corpo.largura, corpo.posicao.y);
+    glVertex2f(corpo.posicao.x + corpo.largura, corpo.posicao.y + corpo.altura);
+    glVertex2f(corpo.posicao.x, corpo.posicao.y + corpo.altura);
     glEnd();
 }
 
+// ***********************************
 // Desenha a asa esquerda do foguete
-void AsaEsquerda(Objeto obj)
+// ***********************************
+void AsaEsquerda(Objeto asaEsq)
 {
     glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
-    glVertex2f(obj.posicao.x, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y + obj.altura);
+    glVertex2f(asaEsq.posicao.x, asaEsq.posicao.y);
+    glVertex2f(asaEsq.posicao.x + asaEsq.largura, asaEsq.posicao.y);
+    glVertex2f(asaEsq.posicao.x + asaEsq.largura, asaEsq.posicao.y + asaEsq.altura);
     glEnd();
 }
 
+// ***********************************
 // Desenha a asa direita do foguete
-void AsaDireita(Objeto obj)
+// ***********************************
+void AsaDireita(Objeto asaDir)
 {
     glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
-    glVertex2f(obj.posicao.x, obj.posicao.y);
-    glVertex2f(obj.posicao.x + obj.largura, obj.posicao.y);
-    glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
+    glVertex2f(asaDir.posicao.x, asaDir.posicao.y);
+    glVertex2f(asaDir.posicao.x + asaDir.largura, asaDir.posicao.y);
+    glVertex2f(asaDir.posicao.x, asaDir.posicao.y + asaDir.altura);
     glEnd();
 }
 
+// ***********************************
 // Funcao para desenhar um foguete
+// ***********************************
 void DesenhaFoguete(Foguete foguete)
 {
     Bico(foguete.bico);
@@ -127,7 +174,9 @@ void DesenhaFoguete(Foguete foguete)
     AsaDireita(foguete.asaDir);
 }
 
+// ***********************************
 // Desenha o quadro correspondente a area onde o foguete pode se movimentar
+// ***********************************
 void DesenhaQuadro()
 {
     glLineWidth(7.0);
@@ -140,10 +189,12 @@ void DesenhaQuadro()
     glEnd();
 }
 
+// ***********************************
 // Desenha um obstaculo na tela
+// ***********************************
 void DesenhaObstaculo(Objeto obj)
 {
-    // Desenha o obstaculo
+    // Desenha o interior do obstaculo
     glBegin(GL_QUADS);
     glColor3f(obj.cor[0], obj.cor[1], obj.cor[2]);
     glVertex2f(obj.posicao.x, obj.posicao.y);
@@ -152,7 +203,7 @@ void DesenhaObstaculo(Objeto obj)
     glVertex2f(obj.posicao.x, obj.posicao.y + obj.altura);
     glEnd();
 
-    // Desenha a linha da borda do obstaculo
+    // Desenha a borda do obstaculo
     glLineWidth(2.0);
     glBegin(GL_LINE_LOOP);
     glColor3f(1, 0, 0);
@@ -163,7 +214,9 @@ void DesenhaObstaculo(Objeto obj)
     glEnd();
 }
 
-// Desenha uma bandeira no topo da tela
+// ***********************************
+// Desenha a bandeira de fim de jogo no topo da tela
+// ***********************************
 void DesenhaBandeira()
 {
     // Desenha a bandeira
@@ -175,7 +228,7 @@ void DesenhaBandeira()
     glVertex2f(bandeira.posicao.x, bandeira.posicao.y + bandeira.altura);
     glEnd();
 
-    // Haste (mastro) da bandeira
+    // Desenha o mastro da bandeira
     glBegin(GL_QUADS);
     glColor3f(1, 1, 1);
     glVertex2f(mastro.posicao.x, mastro.posicao.y);
@@ -185,7 +238,9 @@ void DesenhaBandeira()
     glEnd();
 }
 
+// ***********************************
 // Função callback de desenho principal
+// ***********************************
 void Desenha()
 {
     // Define a cor do fundo como preto
@@ -222,7 +277,9 @@ void Desenha()
     glFlush();
 }
 
+// ***********************************
 // Funcao para verificar a colisao entre uma parte do foguete e um obstaculo
+// ***********************************
 void VerificaColisao(Objeto fog, Objeto obs)
 {
     // Define as coordenadas da parte do foguete
@@ -245,10 +302,6 @@ void VerificaColisao(Objeto fog, Objeto obs)
         ((coordFoguete[2] >= coordObstaculo[2] && coordFoguete[2] <= coordObstaculo[3]) ||
          (coordFoguete[3] >= coordObstaculo[2] && coordFoguete[3] <= coordObstaculo[3])))
     {
-        // Volta o foguete para o ponto inicial
-        moveFoguete.x = 0;
-        moveFoguete.y = 0;
-
         // O jogador perde uma vida
         if (vidas > 0)
             vidas--;
@@ -260,13 +313,22 @@ void VerificaColisao(Objeto fog, Objeto obs)
             bandeira.cor[1] = 0;
             bandeira.cor[2] = 0;
         }
+        
+        // Volta o foguete para o ponto inicial
+        else
+        {
+            moveFoguete.x = 0;
+            moveFoguete.y = 0;
+        }
 
         // Seta o verificador de colisao como true
         houveColisao = true;
     }
 }
 
-// Funcao callback chamada para gerenciar eventos de teclas
+// ***********************************
+// Funcao callback chamada para gerenciar eventos de teclado
+// ***********************************
 void Teclado(unsigned char key, int x, int y)
 {
     switch (key)
@@ -293,7 +355,9 @@ void Teclado(unsigned char key, int x, int y)
     }
 }
 
+// ***********************************
 // Funcao callback chamada para movimentar o foguete
+// ***********************************
 void Movimentacao(int key, int x, int y)
 {
     if (key == GLUT_KEY_UP && moveFoguete.y < 150 && vidas > 0)
@@ -338,7 +402,9 @@ void Movimentacao(int key, int x, int y)
     glutPostRedisplay();
 }
 
-// Funcao responsavel por definir os objetos
+// ***********************************
+// Funcao responsavel por definir tamanho e coordenadas dos objetos do cenario
+// ***********************************
 Objeto InicializaObjeto(
     GLfloat x, GLfloat y, GLfloat h, GLfloat w,
     GLfloat r, GLfloat g, GLfloat b)
@@ -361,7 +427,9 @@ Objeto InicializaObjeto(
     return obj;
 }
 
-// Funcao responsavel por inicializar parametros e variaveis
+// ***********************************
+// Funcao responsavel por inicializar variaveis e objetos do cenario
+// ***********************************
 void Inicializa(void)
 {
     // Quantidade de vidas/tentativas do jogador
@@ -414,24 +482,4 @@ void Inicializa(void)
     glMatrixMode(GL_MODELVIEW);
 }
 
-int main(int argc, char **argv)
-{
-    glutInit(&argc, argv);                       // Programa Principal
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Define do modo de operacao da GLUT
-    glutInitWindowSize(800, 600);                // tamanho em pixels da janela
-
-    // Centraliza a janela do GLUT
-    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - 800) / 2,
-                           (glutGet(GLUT_SCREEN_HEIGHT) - 600) / 2);
-
-    glutCreateWindow("Foguete"); // Cria a janela
-
-    glutDisplayFunc(Desenha);      // Registra funcao de redesenho
-    glutKeyboardFunc(Teclado);     // Registra funcao de teclado
-    glutSpecialFunc(Movimentacao); // Registra funcao de movimento nas setas
-    Inicializa();                  // Chama a funcao de inicializacoes
-
-    glutMainLoop(); // Inicia o processamento e aguarda interacoes do usuario
-
-    return 0;
-}
+// Fim.

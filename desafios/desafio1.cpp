@@ -80,10 +80,10 @@ void Teclado(unsigned char key, int x, int y);
 void Movimentacao(int key, int x, int y);
 
 // Inicializacao dos objetos e variaveis do cenario
+void Inicializa(void);
 Objeto InicializaObjeto(
     GLfloat x, GLfloat y, GLfloat h, GLfloat w,
     GLfloat r = 1, GLfloat g = 1, GLfloat b = 0);
-void Inicializa(void);
 
 // ***********************************
 // Funcao principal do programa
@@ -313,7 +313,7 @@ void VerificaColisao(Objeto fog, Objeto obs)
             bandeira.cor[1] = 0;
             bandeira.cor[2] = 0;
         }
-        
+
         // Volta o foguete para o ponto inicial
         else
         {
@@ -458,17 +458,17 @@ void Inicializa(void)
     obstaculos[2] = InicializaObjeto(20, -40, 10, 40);
     obstaculos[3] = InicializaObjeto(60, -40, 10, 32);
 
-    obstaculos[4] = InicializaObjeto(-80, 0, 10, 40);
+    obstaculos[4] = InicializaObjeto(-92, 0, 10, 50);
     obstaculos[5] = InicializaObjeto(-20, 0, 10, 40);
     obstaculos[6] = InicializaObjeto(20, 0, 40, 10);
-    obstaculos[7] = InicializaObjeto(60, 0, 10, 32);
+    obstaculos[7] = InicializaObjeto(30, 0, 10, 32);
 
-    obstaculos[8] = InicializaObjeto(-80, 40, 10, 40);
-    obstaculos[9] = InicializaObjeto(-40, 40, 10, 40);
-    obstaculos[10] = InicializaObjeto(20, 40, 10, 20);
+    obstaculos[8] = InicializaObjeto(-92, 40, 10, 20);
+    obstaculos[9] = InicializaObjeto(-52, 40, 10, 42);
+    obstaculos[10] = InicializaObjeto(10, 40, 10, 30);
     obstaculos[11] = InicializaObjeto(60, 40, 10, 32);
 
-    obstaculos[12] = InicializaObjeto(-92, 40, 10, 20);
+    obstaculos[12] = InicializaObjeto(84, -30, 40, 8);
 
     qntObstaculos = 13;
 
